@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "populatedb": "node db/populatedb.js"
+    "populatedb": "node ./db/populatedb.js"
   },
   "keywords": [],
   "author": "",
