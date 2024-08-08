@@ -9,6 +9,6 @@ router.get("/new", indexController.getNewMessage);
 
 router.post("/new", indexController.createNewMessage);
 
-router.get("/:id", indexController.getMessageFromId);
+router.get("/message/:id", indexController.getMessageFromId);
 
 module.exports = router;

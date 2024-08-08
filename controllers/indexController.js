@@ -1,19 +1,21 @@
-const messages = [
-  {
-    text: "Hi there!",
-    user: "Amando",
-    added: new Date(),
-    id: crypto.randomUUID(),
-  },
-  {
-    text: "Hello World!",
-    user: "Charles",
-    added: new Date(),
-    id: crypto.randomUUID(),
-  },
-];
+const db = require("../db/queries");
+// const messages = [
+//   {
+//     text: "Hi there!",
+//     user: "Amando",
+//     added: new Date(),
+//     id: crypto.randomUUID(),
+//   },
+//   {
+//     text: "Hello World!",
+//     user: "Charles",
+//     added: new Date(),
+//     id: crypto.randomUUID(),
+//   },
+// ];
 
-const getIndex = (req, res) => {
+const getIndex = async (req, res) => {
+  const messages = await db.getAllMessages();
   res.render("index", { messages, title: "Mini Message Board" });
 };
 
@@ -21,23 +23,17 @@ const getNewMessage = (req, res) => {
   res.render("form", { title: "New Message Form" });
 };
 
-const createNewMessage = (req, res) => {
-  messages.push({
-    text: req.body.message,
-    user: req.body.username,
-    added: new Date(),
-    id: crypto.randomUUID(),
-  });
+const createNewMessage = async (req, res) => {
+  const { message, username } = req.body;
+  await db.insertMessage(message, username, new Date());
   res.redirect("/");
 };
 
-const getMessageFromId = (req, res) => {
+const getMessageFromId = async (req, res) => {
   const messageId = req.params.id;
   if (!messageId) throw new Error();
-  const { user, text, added } = messages.find(
-    (message) => message.id === messageId
-  );
-  res.render("message", { user, text, added, title: "Message Details" });
+  const message = await db.getMessageFromId(messageId);
+  res.render("message", { message, title: "Message Details" });
 };
 
 module.exports = {
